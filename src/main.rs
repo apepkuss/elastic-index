@@ -24,10 +24,10 @@ fn main() {
     let args = Args::parse();
 
     if let Ok(docs) = read_files_from_directory(&args.path) {
-        // 创建输出文件
+        // Create output file
         if let Ok(mut file) = std::fs::File::create(&args.output) {
             for doc in docs {
-                // 创建索引操作行
+                // Create index action line
                 let index_action = serde_json::json!({
                     "index": {
                         "_index": args.index,
@@ -35,12 +35,12 @@ fn main() {
                     }
                 });
 
-                // 写入索引操作行
+                // Write index action line
                 if let Ok(index_line) = serde_json::to_string(&index_action) {
                     writeln!(file, "{}", index_line).unwrap_or_default();
                 }
 
-                // 写入文档数据行
+                // Write document data line
                 if let Ok(doc_line) = serde_json::to_string(&doc) {
                     writeln!(file, "{}", doc_line).unwrap_or_default();
                 }
@@ -64,14 +64,14 @@ fn read_files_from_directory(dir_path: &str) -> std::io::Result<Vec<MyDoc>> {
     let mut docs = Vec::new();
     let dir = Path::new(dir_path);
 
-    // 收集所有文件路径
+    // Collect all file paths
     let mut file_paths: Vec<_> = fs::read_dir(dir)?
         .filter_map(|entry| entry.ok())
         .map(|entry| entry.path())
         .filter(|path| path.is_file())
         .collect();
 
-    // 按文件名排序
+    // Sort files by name
     file_paths.sort_by(|a, b| {
         a.file_name()
             .and_then(|na| na.to_str())
@@ -79,7 +79,7 @@ fn read_files_from_directory(dir_path: &str) -> std::io::Result<Vec<MyDoc>> {
             .cmp(&b.file_name().and_then(|nb| nb.to_str()).unwrap_or(""))
     });
 
-    // 按排序后的顺序处理文件
+    // Process files in sorted order
     for path in file_paths {
         // Get file name without extension
         let file_name = path
