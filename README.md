@@ -1,7 +1,7 @@
 # Create Elasticsearch Index
 
 > [!TIP]
-> This tool is used to create an Elasticsearch index from a directory of files.
+> This tool is used to create a JSONL file from a directory of files. The JSONL file can be used to create an Elasticsearch index.
 
 ## Usage
 
